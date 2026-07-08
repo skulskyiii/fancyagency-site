@@ -253,6 +253,54 @@
   .contact-card a{font-size:1.05rem;font-weight:500;text-decoration:none;color:var(--silver-2);}
   .contact-card a:hover{text-decoration:underline;}
 
+  /* countries / vacancies */
+  .countries-section{background:var(--bg-2);border-top:1px solid var(--panel-border);border-bottom:1px solid var(--panel-border);}
+  .countries-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px;}
+  @media(max-width:760px){.countries-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.countries-grid{grid-template-columns:1fr;}}
+  .country-card{
+    position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--panel-border);
+    aspect-ratio:4/5;display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .country-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.15) contrast(1.05);}
+  .country-card::before{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg, rgba(10,10,11,0) 40%, rgba(10,10,11,.92) 100%);
+  }
+  .country-card .country-body{position:relative;z-index:2;padding:18px;}
+  .country-card .flag{font-size:1.6rem;display:block;margin-bottom:6px;}
+  .country-card h3{font-size:1.05rem;color:var(--silver-2);margin-bottom:12px;}
+  .country-card .btn{width:100%;justify-content:center;font-size:.72rem;padding:10px 14px;}
+
+  .vac-back{background:transparent;border:1px solid var(--panel-border);color:#dcdce0;border-radius:var(--radius);
+    padding:9px 16px;font-family:'IBM Plex Mono', monospace;font-size:.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;}
+  .vac-back:hover{border-color:rgba(255,255,255,.35);}
+
+  .vacancy-list-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  @media(max-width:700px){.vacancy-list-grid{grid-template-columns:1fr;}}
+  .vacancy-card{
+    border:1px solid var(--panel-border);border-radius:var(--radius);padding:22px;background:var(--panel);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .vacancy-card h3{font-size:1.05rem;margin:0;}
+  .vacancy-card .vac-meta{font-family:'IBM Plex Mono', monospace;font-size:.82rem;color:var(--muted);}
+  .vacancy-card .vac-salary{font-family:'IBM Plex Mono', monospace;font-size:.95rem;color:var(--silver-2);}
+  .vac-badges{display:flex;gap:8px;flex-wrap:wrap;}
+  .vac-badge{
+    font-family:'IBM Plex Mono', monospace;font-size:.7rem;letter-spacing:.02em;
+    padding:5px 10px;border-radius:20px;border:1px solid rgba(95,193,247,.3);color:#5fc1f7;background:rgba(42,171,238,.08);
+  }
+  .vacancy-card .btn{align-self:flex-start;margin-top:6px;}
+  .no-vacancies{color:var(--muted);margin-top:24px;}
+
+  .vac-detail-card{border:1px solid var(--panel-border);border-radius:var(--radius);padding:32px;background:var(--panel);max-width:720px;}
+  .vac-detail-card h2{font-size:clamp(1.4rem,3vw,1.9rem);}
+  .vac-detail-row{display:flex;gap:24px;flex-wrap:wrap;margin:18px 0 26px;font-family:'IBM Plex Mono', monospace;font-size:.85rem;color:var(--muted);}
+  .vac-detail-row strong{color:var(--silver-2);font-family:'IBM Plex Sans', sans-serif;}
+  .vac-detail-block{margin-bottom:22px;}
+  .vac-detail-block h4{font-size:.95rem;color:var(--silver-2);margin-bottom:8px;}
+  .vac-detail-block p, .vac-detail-block ul{color:var(--muted);margin:0;font-size:.94rem;padding-left:1.1em;}
+
   footer{padding:44px 0;border-top:1px solid var(--panel-border);}
   footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--muted);}
 </style>
@@ -273,6 +321,7 @@
           <button data-lang="pl">Polski</button>
           <button data-lang="en">English</button>
           <button data-lang="de">Deutsch</button>
+          <button data-lang="ru">Русский</button>
         </div>
       </div>
       <button class="menu-btn" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="More sections">
@@ -280,6 +329,7 @@
       </button>
       <div class="dropdown" id="dropdown">
         <a href="#" data-target="home" data-i18n="nav_home">Головна <span class="arrow">→</span></a>
+        <a href="#vacancies-countries" id="navVacancies" data-i18n="nav_vacancies">Вакансії <span class="arrow">→</span></a>
         <a href="#" data-target="partners" data-i18n="nav_partners">Партнерам <span class="arrow">→</span></a>
         <a href="#" data-target="employers" data-i18n="nav_employers">Роботодавцям <span class="arrow">→</span></a>
       </div>
@@ -290,9 +340,9 @@
 <!-- ============ HOME: JOB SEEKERS ============ -->
 <section class="hero view active" data-view="home">
   <div class="wrap hero-solo">
-    <div class="eyebrow" data-i18n="hero_eyebrow">Робота в Польщі · офіційно</div>
-    <h1><span class="metal" data-i18n="hero_title_1">Роботу знайти легко</span><span data-i18n="hero_title_2">, коли є хто допоможе</span></h1>
-    <p class="lead" data-i18n="hero_lead">Fancy Agency підбирає легальні вакансії в Польщі та супроводжує від заявки до першого робочого дня.</p>
+    <div class="eyebrow" data-i18n="hero_eyebrow">Робота в ЄС · офіційно</div>
+    <h1><span class="metal" data-i18n="hero_title_1">Надійна робота за кордоном</span><span data-i18n="hero_title_2"> — з підтримкою на кожному етапі</span></h1>
+    <p class="lead" data-i18n="hero_lead">Знаходимо роботу. Допомагаємо виїхати. Підтримуємо на шляху.</p>
     <div class="hero-ctas">
       <a href="#apply" class="btn btn-silver" data-i18n="cta_apply">Залишити заявку</a>
       <a href="https://t.me/official_work_in_poland" class="btn btn-tg" data-i18n="cta_telegram">Щоб подивитись вакансії перейдіть у телеграм →</a>
@@ -319,7 +369,7 @@
 
     <div class="about-gallery">
       <div class="about-photo">
-        <img src="https://images.pexels.com/photos/15200454/pexels-photo-15200454.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Робітник на будові" loading="lazy">
+        <img src="https://images.pexels.com/photos/5298215/pexels-photo-5298215.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Група будівельників на об'єкті" loading="lazy">
         <div class="cap" data-i18n="about_photo1">Будівництво</div>
       </div>
       <div class="about-photo">
@@ -329,6 +379,14 @@
       <div class="about-photo">
         <img src="https://images.pexels.com/photos/4487383/pexels-photo-4487383.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Робітники на виробництві" loading="lazy">
         <div class="cap" data-i18n="about_photo3">Виробництво</div>
+      </div>
+      <div class="about-photo">
+        <img src="https://images.pexels.com/photos/6197108/pexels-photo-6197108.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Команда клінінгу за роботою" loading="lazy">
+        <div class="cap" data-i18n="about_photo4">Прибирання</div>
+      </div>
+      <div class="about-photo">
+        <img src="https://images.pexels.com/photos/5368632/pexels-photo-5368632.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Майстриня в салоні краси" loading="lazy">
+        <div class="cap" data-i18n="about_photo5">Сфера краси</div>
       </div>
     </div>
 
@@ -357,6 +415,33 @@
       <h3 data-i18n="mission_h3">Наша місія</h3>
       <p data-i18n="mission_p">Наша місія — створювати можливості для людей та бізнесу. Ми будуємо довіру між кандидатами й роботодавцями, забезпечуючи якісний сервіс, прозорість співпраці та професійний супровід на кожному етапі.</p>
     </div>
+  </div>
+</section>
+
+<!-- ============ COUNTRIES / VACANCIES ============ -->
+<section class="countries-section view active" data-view="home" id="vacancies-countries">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="countries_eyebrow">Робота за кордоном</div>
+    <h2 style="font-size:clamp(1.5rem,3vw,2rem)" data-i18n="countries_h2">Актуальні вакансії</h2>
+    <div class="countries-grid" id="countriesGrid"></div>
+  </div>
+</section>
+
+<!-- ============ VACANCY LIST (per country) ============ -->
+<section class="side-section view" data-view="vac-list" id="vacList">
+  <div class="wrap">
+    <button class="vac-back" id="backToCountries">← <span data-i18n="back_to_countries">Усі країни</span></button>
+    <div class="eyebrow" id="vacListEyebrow">Вакансії</div>
+    <h2 style="font-size:clamp(1.4rem,3vw,1.9rem)" id="vacListTitle"></h2>
+    <div class="vacancy-list-grid" id="vacancyListGrid"></div>
+  </div>
+</section>
+
+<!-- ============ VACANCY DETAIL ============ -->
+<section class="side-section view" data-view="vac-detail" id="vacDetail">
+  <div class="wrap">
+    <button class="vac-back" id="backToList">← <span data-i18n="back_to_list">До списку вакансій</span></button>
+    <div class="vac-detail-card" id="vacDetailBody"></div>
   </div>
 </section>
 
@@ -566,10 +651,10 @@ form.addEventListener("submit", async function(e) {
 
   const translations = {
     ua: {
-      nav_home:"Головна", nav_partners:"Партнерам", nav_employers:"Роботодавцям",
-      hero_eyebrow:"Робота в Польщі · офіційно",
-      hero_title_1:"Роботу знайти легко", hero_title_2:", коли є хто допоможе",
-      hero_lead:"Fancy Agency підбирає легальні вакансії в Польщі та супроводжує від заявки до першого робочого дня.",
+      nav_home:"Головна", nav_partners:"Партнерам", nav_employers:"Роботодавцям", nav_vacancies:"Вакансії",
+      hero_eyebrow:"Робота в ЄС · офіційно",
+      hero_title_1:"Надійна робота за кордоном", hero_title_2:" — з підтримкою на кожному етапі",
+      hero_lead:"Знаходимо роботу. Допомагаємо виїхати. Підтримуємо на шляху.",
       cta_apply:"Залишити заявку",
       cta_telegram:"Щоб подивитись вакансії перейдіть у телеграм →",
       stat1_label:"Людей працевлаштовано", stat2_label:"Партнерів-роботодавців",
@@ -578,7 +663,7 @@ form.addEventListener("submit", async function(e) {
       about_p1:"Ми — міжнародна рекрутингова агенція, яка допомагає людям знайти надійну роботу за кордоном, а роботодавцям — відповідальних працівників.",
       about_p2:"Наша команда супроводжує кандидатів на кожному етапі працевлаштування: від підбору вакансії до успішного виходу на роботу. Ми консультуємо щодо документів, умов праці, організовуємо процес доїзду та надаємо підтримку до моменту працевлаштування.",
       about_p3:"Ми співпрацюємо лише з перевіреними роботодавцями та прагнемо зробити процес пошуку роботи максимально простим, безпечним і зрозумілим для кожного кандидата.",
-      about_photo1:"Будівництво", about_photo2:"Склад", about_photo3:"Виробництво",
+      about_photo1:"Будівництво", about_photo2:"Склад", about_photo3:"Виробництво", about_photo4:"Прибирання", about_photo5:"Сфера краси",
       about_activities_h3:"Чим ми займаємося",
       activity_1:"Підбираємо вакансії відповідно до досвіду, побажань та можливостей кандидатів",
       activity_2:"Консультуємо щодо оформлення необхідних документів",
@@ -592,6 +677,14 @@ form.addEventListener("submit", async function(e) {
       for_employers_p:"Ми допомагаємо компаніям оперативно знаходити необхідних працівників, проводимо первинний відбір кандидатів та організовуємо процес підбору персоналу відповідно до потреб бізнесу.",
       mission_h3:"Наша місія",
       mission_p:"Наша місія — створювати можливості для людей та бізнесу. Ми будуємо довіру між кандидатами й роботодавцями, забезпечуючи якісний сервіс, прозорість співпраці та професійний супровід на кожному етапі.",
+      countries_eyebrow:"Робота за кордоном", countries_h2:"Актуальні вакансії",
+      back_to_countries:"Усі країни", back_to_list:"До списку вакансій",
+      view_vacancies_btn:"Переглянути вакансії", vac_details_btn:"Детальніше", vac_apply_btn:"Подати заявку",
+      vac_field_country:"Країна", vac_field_city:"Місто", vac_field_salary:"Зарплата",
+      vac_field_requirements:"Вимоги", vac_field_duties:"Обов'язки", vac_field_schedule:"Графік роботи",
+      vac_field_housing:"Проживання", vac_field_extra:"Додаткові умови",
+      country_poland:"Польща", country_germany:"Німеччина", country_belgium:"Бельгія",
+      country_netherlands:"Нідерланди", country_france:"Франція", country_lithuania:"Литва",
       apply_eyebrow:"Заявка", apply_h2:"Залиште заявку — ми зв'яжемось у Telegram або дзвінком",
       f_name:"Ім'я", f_phone:"Телефон / Telegram", f_city:"Місто в Україні", f_spec:"Спеціальність / досвід",
       f_msg:"Коментар", f_msg_ph:"Бажане місто в Польщі, графік, будь-які деталі", f_submit:"Надіслати заявку",
@@ -620,10 +713,10 @@ form.addEventListener("submit", async function(e) {
       footer_tagline:"робота в Польщі"
     },
     pl: {
-      nav_home:"Strona główna", nav_partners:"Partnerzy", nav_employers:"Pracodawcy",
-      hero_eyebrow:"Praca w Polsce · legalnie",
-      hero_title_1:"Łatwo znaleźć pracę", hero_title_2:", gdy jest kto pomoże",
-      hero_lead:"Fancy Agency dobiera legalne oferty pracy w Polsce i towarzyszy od zgłoszenia do pierwszego dnia pracy.",
+      nav_home:"Strona główna", nav_partners:"Partnerzy", nav_employers:"Pracodawcy", nav_vacancies:"Oferty pracy",
+      hero_eyebrow:"Praca w UE · legalnie",
+      hero_title_1:"Solidna praca za granicą", hero_title_2:" — ze wsparciem na każdym etapie",
+      hero_lead:"Znajdujemy pracę. Pomagamy wyjechać. Wspieramy w drodze.",
       cta_apply:"Zostaw zgłoszenie",
       cta_telegram:"Aby zobaczyć oferty pracy, przejdź do Telegramu →",
       stat1_label:"Osób zatrudnionych", stat2_label:"Partnerów-pracodawców",
@@ -632,7 +725,7 @@ form.addEventListener("submit", async function(e) {
       about_p1:"Jesteśmy międzynarodową agencją rekrutacyjną, która pomaga ludziom znaleźć wiarygodną pracę za granicą, a pracodawcom — odpowiedzialnych pracowników.",
       about_p2:"Nasz zespół towarzyszy kandydatom na każdym etapie zatrudnienia: od doboru oferty do skutecznego rozpoczęcia pracy. Doradzamy w sprawach dokumentów, warunków pracy, organizujemy wyjazd i wsparcie do momentu zatrudnienia.",
       about_p3:"Współpracujemy wyłącznie ze sprawdzonymi pracodawcami i dążymy, aby proces poszukiwania pracy był jak najprostszy, bezpieczny i zrozumiały dla każdego kandydata.",
-      about_photo1:"Budowa", about_photo2:"Magazyn", about_photo3:"Produkcja",
+      about_photo1:"Budowa", about_photo2:"Magazyn", about_photo3:"Produkcja", about_photo4:"Sprzątanie", about_photo5:"Branża beauty",
       about_activities_h3:"Czym się zajmujemy",
       activity_1:"Dobieramy oferty pracy zgodnie z doświadczeniem, oczekiwaniami i możliwościami kandydatów",
       activity_2:"Doradzamy w sprawie wymaganych dokumentów",
@@ -646,6 +739,14 @@ form.addEventListener("submit", async function(e) {
       for_employers_p:"Pomagamy firmom szybko znajdować potrzebnych pracowników, przeprowadzamy wstępną selekcję kandydatów i organizujemy proces rekrutacji zgodnie z potrzebami biznesu.",
       mission_h3:"Nasza misja",
       mission_p:"Naszą misją jest tworzenie możliwości dla ludzi i biznesu. Budujemy zaufanie między kandydatami a pracodawcami, zapewniając wysoką jakość usług, przejrzystość współpracy i profesjonalne wsparcie na każdym etapie.",
+      countries_eyebrow:"Praca za granicą", countries_h2:"Aktualne oferty pracy",
+      back_to_countries:"Wszystkie kraje", back_to_list:"Do listy ofert",
+      view_vacancies_btn:"Zobacz oferty pracy", vac_details_btn:"Szczegóły", vac_apply_btn:"Wyślij zgłoszenie",
+      vac_field_country:"Kraj", vac_field_city:"Miasto", vac_field_salary:"Wynagrodzenie",
+      vac_field_requirements:"Wymagania", vac_field_duties:"Obowiązki", vac_field_schedule:"Grafik pracy",
+      vac_field_housing:"Zakwaterowanie", vac_field_extra:"Dodatkowe warunki",
+      country_poland:"Polska", country_germany:"Niemcy", country_belgium:"Belgia",
+      country_netherlands:"Holandia", country_france:"Francja", country_lithuania:"Litwa",
       apply_eyebrow:"Zgłoszenie", apply_h2:"Zostaw zgłoszenie — skontaktujemy się przez Telegram lub telefonicznie",
       f_name:"Imię", f_phone:"Telefon / Telegram", f_city:"Miasto na Ukrainie", f_spec:"Specjalność / doświadczenie",
       f_msg:"Komentarz", f_msg_ph:"Preferowane miasto w Polsce, grafik, dowolne szczegóły", f_submit:"Wyślij zgłoszenie",
@@ -674,10 +775,10 @@ form.addEventListener("submit", async function(e) {
       footer_tagline:"praca w Polsce"
     },
     en: {
-      nav_home:"Home", nav_partners:"For Partners", nav_employers:"For Employers",
-      hero_eyebrow:"Work in Poland · legally",
-      hero_title_1:"Finding a job is easy", hero_title_2:" when someone helps you",
-      hero_lead:"Fancy Agency matches legal job offers in Poland and supports you from application to your first day at work.",
+      nav_home:"Home", nav_partners:"For Partners", nav_employers:"For Employers", nav_vacancies:"Vacancies",
+      hero_eyebrow:"Work in the EU · legally",
+      hero_title_1:"Reliable work abroad", hero_title_2:" — with support at every step",
+      hero_lead:"We find the job. We help you get there. We support you along the way.",
       cta_apply:"Leave an application",
       cta_telegram:"To see job openings, go to Telegram →",
       stat1_label:"People placed in jobs", stat2_label:"Employer partners",
@@ -686,7 +787,7 @@ form.addEventListener("submit", async function(e) {
       about_p1:"We are an international recruitment agency that helps people find reliable jobs abroad, and helps employers find responsible workers.",
       about_p2:"Our team supports candidates at every stage of employment: from matching a vacancy to a successful start at work. We advise on documents and working conditions, organise the travel process and provide support until employment is confirmed.",
       about_p3:"We work only with verified employers and aim to make the job search process as simple, safe and clear as possible for every candidate.",
-      about_photo1:"Construction", about_photo2:"Warehouse", about_photo3:"Production",
+      about_photo1:"Construction", about_photo2:"Warehouse", about_photo3:"Production", about_photo4:"Cleaning", about_photo5:"Beauty industry",
       about_activities_h3:"What we do",
       activity_1:"We match vacancies according to candidates' experience, preferences and abilities",
       activity_2:"We advise on preparing the necessary documents",
@@ -700,6 +801,14 @@ form.addEventListener("submit", async function(e) {
       for_employers_p:"We help companies quickly find the staff they need, carry out initial candidate screening and organise the hiring process according to your business needs.",
       mission_h3:"Our mission",
       mission_p:"Our mission is to create opportunities for people and businesses. We build trust between candidates and employers by providing quality service, transparent cooperation and professional support at every stage.",
+      countries_eyebrow:"Work abroad", countries_h2:"Current vacancies",
+      back_to_countries:"All countries", back_to_list:"Back to vacancy list",
+      view_vacancies_btn:"View vacancies", vac_details_btn:"Details", vac_apply_btn:"Apply now",
+      vac_field_country:"Country", vac_field_city:"City", vac_field_salary:"Salary",
+      vac_field_requirements:"Requirements", vac_field_duties:"Duties", vac_field_schedule:"Work schedule",
+      vac_field_housing:"Accommodation", vac_field_extra:"Additional conditions",
+      country_poland:"Poland", country_germany:"Germany", country_belgium:"Belgium",
+      country_netherlands:"Netherlands", country_france:"France", country_lithuania:"Lithuania",
       apply_eyebrow:"Application", apply_h2:"Leave an application — we'll reach out via Telegram or by phone",
       f_name:"Name", f_phone:"Phone / Telegram", f_city:"City in Ukraine", f_spec:"Occupation / experience",
       f_msg:"Comment", f_msg_ph:"Preferred city in Poland, schedule, any details", f_submit:"Submit application",
@@ -728,10 +837,10 @@ form.addEventListener("submit", async function(e) {
       footer_tagline:"work in Poland"
     },
     de: {
-      nav_home:"Startseite", nav_partners:"Für Partner", nav_employers:"Für Arbeitgeber",
-      hero_eyebrow:"Arbeiten in Polen · legal",
-      hero_title_1:"Einen Job zu finden ist einfach", hero_title_2:", wenn dir jemand hilft",
-      hero_lead:"Fancy Agency vermittelt legale Stellenangebote in Polen und begleitet Sie von der Bewerbung bis zum ersten Arbeitstag.",
+      nav_home:"Startseite", nav_partners:"Für Partner", nav_employers:"Für Arbeitgeber", nav_vacancies:"Stellenangebote",
+      hero_eyebrow:"Arbeiten in der EU · legal",
+      hero_title_1:"Zuverlässige Arbeit im Ausland", hero_title_2:" — mit Unterstützung in jeder Phase",
+      hero_lead:"Wir finden die Stelle. Wir helfen bei der Ausreise. Wir begleiten Sie auf dem Weg.",
       cta_apply:"Bewerbung hinterlassen",
       cta_telegram:"Um Stellenangebote zu sehen, gehen Sie zu Telegram →",
       stat1_label:"Vermittelte Personen", stat2_label:"Arbeitgeber-Partner",
@@ -740,7 +849,7 @@ form.addEventListener("submit", async function(e) {
       about_p1:"Wir sind eine internationale Personalvermittlungsagentur, die Menschen hilft, zuverlässige Arbeit im Ausland zu finden, und Arbeitgebern verantwortungsbewusste Mitarbeiter vermittelt.",
       about_p2:"Unser Team begleitet Kandidaten in jeder Phase der Vermittlung: von der Auswahl der Stelle bis zum erfolgreichen Arbeitsbeginn. Wir beraten zu Dokumenten und Arbeitsbedingungen, organisieren die Anreise und bieten Unterstützung bis zur Anstellung.",
       about_p3:"Wir arbeiten nur mit geprüften Arbeitgebern zusammen und bemühen uns, den Jobsuchprozess für jeden Kandidaten so einfach, sicher und verständlich wie möglich zu gestalten.",
-      about_photo1:"Bauwesen", about_photo2:"Lager", about_photo3:"Produktion",
+      about_photo1:"Bauwesen", about_photo2:"Lager", about_photo3:"Produktion", about_photo4:"Reinigung", about_photo5:"Beauty-Branche",
       about_activities_h3:"Was wir tun",
       activity_1:"Wir wählen Stellen passend zu Erfahrung, Wünschen und Möglichkeiten der Kandidaten aus",
       activity_2:"Wir beraten zur Erstellung der erforderlichen Dokumente",
@@ -754,6 +863,14 @@ form.addEventListener("submit", async function(e) {
       for_employers_p:"Wir helfen Unternehmen, schnell die benötigten Mitarbeiter zu finden, führen eine erste Kandidatenauswahl durch und organisieren den Rekrutierungsprozess entsprechend den Bedürfnissen Ihres Unternehmens.",
       mission_h3:"Unsere Mission",
       mission_p:"Unsere Mission ist es, Möglichkeiten für Menschen und Unternehmen zu schaffen. Wir bauen Vertrauen zwischen Kandidaten und Arbeitgebern auf, indem wir hochwertigen Service, transparente Zusammenarbeit und professionelle Begleitung in jeder Phase bieten.",
+      countries_eyebrow:"Arbeiten im Ausland", countries_h2:"Aktuelle Stellenangebote",
+      back_to_countries:"Alle Länder", back_to_list:"Zurück zur Liste",
+      view_vacancies_btn:"Stellenangebote ansehen", vac_details_btn:"Details", vac_apply_btn:"Jetzt bewerben",
+      vac_field_country:"Land", vac_field_city:"Stadt", vac_field_salary:"Gehalt",
+      vac_field_requirements:"Anforderungen", vac_field_duties:"Aufgaben", vac_field_schedule:"Arbeitszeit",
+      vac_field_housing:"Unterkunft", vac_field_extra:"Zusätzliche Bedingungen",
+      country_poland:"Polen", country_germany:"Deutschland", country_belgium:"Belgien",
+      country_netherlands:"Niederlande", country_france:"Frankreich", country_lithuania:"Litauen",
       apply_eyebrow:"Bewerbung", apply_h2:"Bewerbung hinterlassen — wir melden uns per Telegram oder Anruf",
       f_name:"Name", f_phone:"Telefon / Telegram", f_city:"Stadt in der Ukraine", f_spec:"Beruf / Erfahrung",
       f_msg:"Kommentar", f_msg_ph:"Gewünschte Stadt in Polen, Arbeitszeit, weitere Details", f_submit:"Bewerbung senden",
@@ -780,6 +897,68 @@ form.addEventListener("submit", async function(e) {
       contacts_eyebrow:"Kontakt", contacts_h2:"Unsere Kontakte",
       contacts_phone_label:"Telefon", contacts_email_label:"E-Mail für Arbeitgeber",
       footer_tagline:"Arbeiten in Polen"
+    },
+    ru: {
+      nav_home:"Главная", nav_partners:"Партнёрам", nav_employers:"Работодателям", nav_vacancies:"Вакансии",
+      hero_eyebrow:"Работа в ЕС · официально",
+      hero_title_1:"Надёжная работа за рубежом", hero_title_2:" — с поддержкой на каждом этапе",
+      hero_lead:"Находим работу. Помогаем выехать. Поддерживаем на пути.",
+      cta_apply:"Оставить заявку",
+      cta_telegram:"Чтобы посмотреть вакансии, перейдите в телеграм →",
+      stat1_label:"Человек трудоустроено", stat2_label:"Партнёров-работодателей",
+      stat3_num:"3–5 дней", stat3_label:"От заявки до ответа",
+      about_eyebrow:"О нас", about_h2:"Кто мы",
+      about_p1:"Мы — международное рекрутинговое агентство, которое помогает людям найти надёжную работу за рубежом, а работодателям — ответственных сотрудников.",
+      about_p2:"Наша команда сопровождает кандидатов на каждом этапе трудоустройства: от подбора вакансии до успешного выхода на работу. Мы консультируем по документам, условиям труда, организуем процесс переезда и оказываем поддержку до момента трудоустройства.",
+      about_p3:"Мы сотрудничаем только с проверенными работодателями и стремимся сделать процесс поиска работы максимально простым, безопасным и понятным для каждого кандидата.",
+      about_photo1:"Строительство", about_photo2:"Склад", about_photo3:"Производство", about_photo4:"Клининг", about_photo5:"Индустрия красоты",
+      about_activities_h3:"Чем мы занимаемся",
+      activity_1:"Подбираем вакансии в соответствии с опытом, пожеланиями и возможностями кандидатов",
+      activity_2:"Консультируем по оформлению необходимых документов",
+      activity_3:"Помогаем организовать выезд и переезд к месту работы",
+      activity_4:"Сопровождаем кандидатов до момента официального трудоустройства",
+      activity_5:"Сотрудничаем с работодателями и помогаем им быстро находить квалифицированный персонал",
+      activity_6:"Развиваем партнёрскую программу, которая позволяет нашим партнёрам рекомендовать кандидатов и получать вознаграждение за успешное трудоустройство",
+      for_candidates_h3:"Для кандидатов",
+      for_candidates_p:"Мы понимаем, что поиск работы за рубежом — важный шаг. Именно поэтому мы обеспечиваем полное сопровождение, отвечаем на все вопросы и помогаем пройти весь путь максимально комфортно.",
+      for_employers_h3:"Для работодателей",
+      for_employers_p:"Мы помогаем компаниям оперативно находить нужных работников, проводим первичный отбор кандидатов и организуем процесс подбора персонала в соответствии с потребностями бизнеса.",
+      mission_h3:"Наша миссия",
+      mission_p:"Наша миссия — создавать возможности для людей и бизнеса. Мы строим доверие между кандидатами и работодателями, обеспечивая качественный сервис, прозрачность сотрудничества и профессиональное сопровождение на каждом этапе.",
+      countries_eyebrow:"Работа за рубежом", countries_h2:"Актуальные вакансии",
+      back_to_countries:"Все страны", back_to_list:"К списку вакансий",
+      view_vacancies_btn:"Посмотреть вакансии", vac_details_btn:"Подробнее", vac_apply_btn:"Подать заявку",
+      vac_field_country:"Страна", vac_field_city:"Город", vac_field_salary:"Зарплата",
+      vac_field_requirements:"Требования", vac_field_duties:"Обязанности", vac_field_schedule:"График работы",
+      vac_field_housing:"Проживание", vac_field_extra:"Дополнительные условия",
+      country_poland:"Польша", country_germany:"Германия", country_belgium:"Бельгия",
+      country_netherlands:"Нидерланды", country_france:"Франция", country_lithuania:"Литва",
+      apply_eyebrow:"Заявка", apply_h2:"Оставьте заявку — мы свяжемся в Telegram или по звонку",
+      f_name:"Имя", f_phone:"Телефон / Telegram", f_city:"Город в Украине", f_spec:"Специальность / опыт",
+      f_msg:"Комментарий", f_msg_ph:"Желаемый город в Польше, график, любые детали", f_submit:"Отправить заявку",
+      form_note:"Форма пока что макет дизайна — подключите Google Forms или Tally.so, чтобы заявки приходили вам на почту.",
+      tgcta_h3:"Быстрее через Telegram", tgcta_p:"Чтобы посмотреть вакансии — перейдите в Telegram, отвечаем в течение дня.",
+      partners_eyebrow:"Партнёрская программа", partners_h2:"💎 Как работать и зарабатывать с Fancy Agency",
+      partners_intro:"Добро пожаловать! Ваша главная задача — находить кандидатов на актуальные вакансии и сопровождать их на начальном этапе.",
+      partners_what_h3:"🔹 Что именно нужно делать?",
+      p_step1_h3:"Размещение объявлений", p_step1_p:"Публикуйте вакансии (которые вы берёте у нас) в тематических группах Facebook, Telegram и т.д. или креатив в Instagram или TikTok — с вашим контактным номером телефона.",
+      p_step2_h3:"Первичный контакт", p_step2_p:"Общайтесь с кандидатами, которые вам пишут или звонят.",
+      p_step3_h3:"Консультация", p_step3_p:"Коротко расскажите о сути работы. Если возникают сложные вопросы — вы всегда можете уточнить ответ у нас 💬",
+      partners_pay_h3:"💰 Как происходит оплата?",
+      partners_pay_p1:"Мы ценим результативность. За каждого трудоустроенного кандидата вы получаете от 2000 до 5000 гривен — точная сумма зависит от конкретной вакансии, детали указаны в каждом объявлении.",
+      partners_pay_p2:"✅ Условия выплат: 100% вознаграждения — если кандидат отработает 14 дней, 1 месяц или определённое количество часов (зависит от вакансии).",
+      partners_vac_h3:"📲 Где брать актуальные вакансии?",
+      partners_vac_p:"Все свежие предложения, условия и размеры бонусов ежедневно публикуются в нашем партнёрском канале. Следите за обновлениями, копируйте текст и начинайте работать!",
+      partners_pass_h3:"📥 Куда передавать найденного кандидата?",
+      partners_pass_p:"Как только вы нашли человека, готового ехать на работу, — сразу пишите или звоните нам. Контакты для передачи кандидатов — в партнёрском канале.",
+      partners_channel_label:"Партнёрский канал:", open_channel:"Открыть канал →",
+      employers_eyebrow:"Работодателям", employers_h2:"Подбираем людей под вашу работу",
+      employers_p:"Мы отбираем кандидатов под конкретные требования вакансии — график, квалификацию, длительность контракта — и сопровождаем оформление разрешений на работу.",
+      employers_li1:"Подбор под постоянный и сезонный набор", employers_li2:"Проверка кандидатов перед отправкой", employers_li3:"Сопровождение оформления документов",
+      employers_email_label:"Наша почта для работодателей:",
+      contacts_eyebrow:"Контакты", contacts_h2:"Наши контакты",
+      contacts_phone_label:"Телефон", contacts_email_label:"Почта для работодателей",
+      footer_tagline:"работа в Польше"
     }
   };
 
@@ -808,6 +987,257 @@ form.addEventListener("submit", async function(e) {
       langBtn.setAttribute('aria-expanded', 'false');
     });
   });
+
+  /* ==================================================================
+     VACANCIES: countries + jobs, driven by a simple data array.
+     To add a new vacancy, just add a new object to VACANCIES below —
+     no new HTML files needed.
+  ================================================================== */
+  const COUNTRIES = [
+    { code:'poland',      flag:'🇵🇱', key:'country_poland',      photo:'https://images.pexels.com/photos/33894194/pexels-photo-33894194.jpeg?auto=compress&cs=tinysrgb&w=700' },
+    { code:'germany',     flag:'🇩🇪', key:'country_germany',     photo:'https://images.pexels.com/photos/38150071/pexels-photo-38150071.jpeg?auto=compress&cs=tinysrgb&w=700' },
+    { code:'belgium',     flag:'🇧🇪', key:'country_belgium',     photo:'https://images.pexels.com/photos/28847012/pexels-photo-28847012.jpeg?auto=compress&cs=tinysrgb&w=700' },
+    { code:'netherlands', flag:'🇳🇱', key:'country_netherlands', photo:'https://images.pexels.com/photos/4237160/pexels-photo-4237160.jpeg?auto=compress&cs=tinysrgb&w=700' },
+    { code:'france',      flag:'🇫🇷', key:'country_france',      photo:'https://images.pexels.com/photos/2265845/pexels-photo-2265845.jpeg?auto=compress&cs=tinysrgb&w=700' },
+    { code:'lithuania',   flag:'🇱🇹', key:'country_lithuania',   photo:'https://images.pexels.com/photos/28975994/pexels-photo-28975994.jpeg?auto=compress&cs=tinysrgb&w=700' }
+  ];
+
+  // Add new vacancies here — each one is a plain object, no HTML editing required.
+  const VACANCIES = [
+    {
+      id:'be-plumber-01', country:'belgium', title:'Сантехнік', city:'Західна Фландрія',
+      salary:'Від 15 €/год нетто', badges:['Житло надається','Без знання мови'],
+      requirements:['Досвід роботи від 1 року','Дійсний закордонний паспорт','Базові навички сантехнічних робіт'],
+      duties:'Монтаж та ремонт сантехнічних систем на об’єктах замовника.',
+      schedule:'5/2, 8-9 годин на день', housing:'Надається безкоштовно, окрема кімната',
+      extra:'Оплата проїзду після 2 місяців роботи'
+    },
+    {
+      id:'be-electrician-01', country:'belgium', title:'Електрик', city:'Антверпен',
+      salary:'Від 16 €/год нетто', badges:['Житло надається','Стабільні об’єкти'],
+      requirements:['Досвід від 2 років','Знання електромонтажних робіт','Власні базові інструменти'],
+      duties:'Монтаж та підключення електромереж на будівельних об’єктах.',
+      schedule:'5/2, 9 годин', housing:'Надається безкоштовно',
+      extra:'Можливість подовження контракту'
+    },
+    {
+      id:'be-construction-01', country:'belgium', title:'Будівельник (загальні роботи)', city:'Гент',
+      salary:'Від 14 €/год нетто', badges:['Швидкий виїзд','Без знання мови'],
+      requirements:['Досвід у будівництві вітається','Готовність до фізичної роботи'],
+      duties:'Загальнобудівельні роботи, оздоблення, допомога бригаді.',
+      schedule:'5/2, 8-10 годин', housing:'Надається', extra:'Аванси щотижня'
+    },
+    {
+      id:'nl-construction-01', country:'netherlands', title:'Будівельник', city:'Амстердам',
+      salary:'Від 15 €/год нетто', badges:['Житло надається','Без знання мови'],
+      requirements:['Досвід у будівництві вітається','Витривалість'],
+      duties:'Загальнобудівельні та оздоблювальні роботи.',
+      schedule:'5/2, 8-10 годин', housing:'Надається', extra:'Оплата проїзду після 2 місяців роботи'
+    },
+    {
+      id:'nl-construction-02', country:'netherlands', title:'Опалубник', city:'Роттердам',
+      salary:'Від 16 €/год нетто', badges:['Стабільна зарплата'],
+      requirements:['Досвід роботи від 1 року','Готовність до фізичної роботи'],
+      duties:'Монтаж та демонтаж опалубки на будівельних об’єктах.',
+      schedule:'5/2, 8-9 годин', housing:'Компенсація частини вартості житла',
+      extra:'Офіційне оформлення з першого дня'
+    },
+    {
+      id:'lt-construction-01', country:'lithuania', title:'Будівельник загального профілю', city:'Вільнюс',
+      salary:'Від 9 €/год нетто', badges:['Житло надається','Швидкий виїзд'],
+      requirements:['Досвід у будівництві вітається','Готовність до фізичної роботи'],
+      duties:'Загальнобудівельні та оздоблювальні роботи на житлових об’єктах.',
+      schedule:'5/2, 8-9 годин', housing:'Надається', extra:'Аванси щотижня'
+    },
+    {
+      id:'lt-construction-02', country:'lithuania', title:'Монтажник гіпсокартону', city:'Каунас',
+      salary:'Від 10 €/год нетто', badges:['Стабільна зарплата'],
+      requirements:['Досвід роботи від 1 року','Власні базові інструменти'],
+      duties:'Монтаж каркасів і обшивка гіпсокартоном на об’єктах.',
+      schedule:'5/2, 8 годин', housing:'Компенсація частини вартості житла',
+      extra:'Можливість подовження контракту'
+    },
+    {
+      id:'de-plumber-01', country:'germany', title:'Сантехнік', city:'Мюнхен',
+      salary:'Від 15 €/год нетто', badges:['Стабільна зарплата'],
+      requirements:['Базовий рівень німецької або англійської','Досвід роботи від 1 року'],
+      duties:'Монтаж і ремонт сантехнічних систем на об’єктах замовника.',
+      schedule:'5/2, 8 годин', housing:'Компенсація частини вартості житла',
+      extra:'Офіційне працевлаштування з першого дня'
+    },
+    {
+      id:'de-electrician-01', country:'germany', title:'Електрик', city:'Гамбург',
+      salary:'Від 17 €/год нетто', badges:['Високий рівень оплати'],
+      requirements:['Досвід від 2 років','Базова німецька або англійська'],
+      duties:'Електромонтажні роботи на будівельних об’єктах.',
+      schedule:'5/2, 8-9 годин', housing:'Компенсація частини вартості житла',
+      extra:'Можливість подовження контракту'
+    },
+    {
+      id:'de-construction-01', country:'germany', title:'Будівельник', city:'Берлін',
+      salary:'Від 14 €/год нетто', badges:['Швидкий виїзд'],
+      requirements:['Досвід у будівництві вітається','Готовність до фізичної роботи'],
+      duties:'Загальнобудівельні роботи на об’єктах компанії-партнера.',
+      schedule:'5/2, 8-10 годин', housing:'Можливе за додаткову плату', extra:'Аванси щотижня'
+    },
+    {
+      id:'de-cleaning-01', country:'germany', title:'Клінінг-менеджер', city:'Франкфурт',
+      salary:'Від 13 €/год нетто', badges:['Житло надається','Без знання мови'],
+      requirements:['Досвід у клінінгу вітається','Охайність, відповідальність'],
+      duties:'Прибирання офісних та комерційних приміщень.',
+      schedule:'5/2, зранку', housing:'Надається', extra:'Забезпечення інвентарем та формою'
+    },
+    {
+      id:'fr-cleaning-01', country:'france', title:'Прибиральниця/прибиральник', city:'Париж',
+      salary:'Від 12 €/год нетто', badges:['Житло надається','Без знання мови'],
+      requirements:['Досвід у клінінгу вітається','Охайність, відповідальність'],
+      duties:'Прибирання житлових та комерційних приміщень.',
+      schedule:'5/2, зранку', housing:'Надається', extra:'Забезпечення інвентарем та формою'
+    },
+    {
+      id:'fr-lash-01', country:'france', title:'Майстер з нарощування вій', city:'Ліон',
+      salary:'Від 60% від чеку клієнта', badges:['Досвід обов’язковий'],
+      requirements:['Досвід роботи від 1 року','Портфоліо робіт','Власні базові матеріали'],
+      duties:'Нарощування та корекція вій у салоні краси.',
+      schedule:'Гнучкий графік', housing:'Допомога у пошуку житла',
+      extra:'Можливість оренди робочого місця в салоні'
+    },
+    {
+      id:'fr-manicure-01', country:'france', title:'Майстер манікюру', city:'Марсель',
+      salary:'Від 55% від чеку клієнта', badges:['Досвід обов’язковий'],
+      requirements:['Досвід роботи від 1 року','Портфоліо робіт'],
+      duties:'Манікюр, педикюр, покриття гель-лаком у салоні краси.',
+      schedule:'Гнучкий графік', housing:'Допомога у пошуку житла',
+      extra:'Можливість оренди робочого місця в салоні'
+    },
+    {
+      id:'fr-beauty-01', country:'france', title:'Майстер з депіляції / брів', city:'Ніцца',
+      salary:'Від 50% від чеку клієнта', badges:['Досвід вітається'],
+      requirements:['Досвід роботи в бʼюті-сфері вітається','Комунікабельність'],
+      duties:'Депіляція, корекція та фарбування брів у салоні краси.',
+      schedule:'Гнучкий графік', housing:'Допомога у пошуку житла',
+      extra:'Навчання від салону для новачків з базовим досвідом'
+    }
+  ];
+
+  const countriesGrid = document.getElementById('countriesGrid');
+  const vacListView = document.querySelector('[data-view="vac-list"]');
+  const vacDetailView = document.querySelector('[data-view="vac-detail"]');
+  let currentCountry = null;
+
+  function t(key){
+    const lang = document.documentElement.lang === 'uk' ? 'ua' : document.documentElement.lang;
+    return (translations[lang] && translations[lang][key]) || translations.ua[key] || key;
+  }
+
+  function renderCountries(){
+    countriesGrid.innerHTML = COUNTRIES.map(c => `
+      <div class="country-card">
+        <img src="${c.photo}" alt="${t(c.key)}" loading="lazy">
+        <div class="country-body">
+          <span class="flag">${c.flag}</span>
+          <h3>${t(c.key)}</h3>
+          <button class="btn btn-silver" data-country="${c.code}">${t('view_vacancies_btn')}</button>
+        </div>
+      </div>
+    `).join('');
+    countriesGrid.querySelectorAll('button[data-country]').forEach(btn => {
+      btn.addEventListener('click', () => openCountry(btn.dataset.country));
+    });
+  }
+
+  function openCountry(code){
+    currentCountry = code;
+    const country = COUNTRIES.find(c => c.code === code);
+    document.getElementById('vacListEyebrow').textContent = t(country.key);
+    document.getElementById('vacListTitle').textContent = t('view_vacancies_btn') + ' — ' + t(country.key);
+    const jobs = VACANCIES.filter(v => v.country === code);
+    const grid = document.getElementById('vacancyListGrid');
+    if(jobs.length === 0){
+      grid.innerHTML = `<p class="no-vacancies">—</p>`;
+    } else {
+      grid.innerHTML = jobs.map(v => `
+        <div class="vacancy-card">
+          <h3>${v.title}</h3>
+          <div class="vac-meta">${country.flag} ${t(country.key)} · 📍 ${v.city}</div>
+          <div class="vac-salary">💰 ${v.salary}</div>
+          <div class="vac-badges">${v.badges.map(b => `<span class="vac-badge">${b}</span>`).join('')}</div>
+          <button class="btn btn-ghost" data-vacancy="${v.id}">${t('vac_details_btn')}</button>
+        </div>
+      `).join('');
+      grid.querySelectorAll('button[data-vacancy]').forEach(btn => {
+        btn.addEventListener('click', () => openVacancy(btn.dataset.vacancy));
+      });
+    }
+    showView('vac-list');
+  }
+
+  function openVacancy(id){
+    const v = VACANCIES.find(v => v.id === id);
+    const country = COUNTRIES.find(c => c.code === v.country);
+    document.getElementById('vacDetailBody').innerHTML = `
+      <h2>${v.title}</h2>
+      <div class="vac-detail-row">
+        <div><strong>${t('vac_field_country')}:</strong> ${country.flag} ${t(country.key)}</div>
+        <div><strong>${t('vac_field_city')}:</strong> ${v.city}</div>
+        <div><strong>${t('vac_field_salary')}:</strong> ${v.salary}</div>
+      </div>
+      <div class="vac-detail-block">
+        <h4>${t('vac_field_requirements')}</h4>
+        <ul>${v.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
+      </div>
+      <div class="vac-detail-block">
+        <h4>${t('vac_field_duties')}</h4>
+        <p>${v.duties}</p>
+      </div>
+      <div class="vac-detail-block">
+        <h4>${t('vac_field_schedule')}</h4>
+        <p>${v.schedule}</p>
+      </div>
+      <div class="vac-detail-block">
+        <h4>${t('vac_field_housing')}</h4>
+        <p>${v.housing}</p>
+      </div>
+      <div class="vac-detail-block">
+        <h4>${t('vac_field_extra')}</h4>
+        <p>${v.extra}</p>
+      </div>
+      <button class="btn btn-silver" id="applyForVacancy">${t('vac_apply_btn')}</button>
+    `;
+    document.getElementById('applyForVacancy').addEventListener('click', () => {
+      showView('home');
+      const specField = document.getElementById('spec');
+      if(specField) specField.value = v.title + ' — ' + t(country.key) + ' (' + v.city + ')';
+      setTimeout(() => document.getElementById('apply').scrollIntoView({behavior:'smooth'}), 50);
+    });
+    showView('vac-detail');
+  }
+
+  document.getElementById('backToCountries').addEventListener('click', () => {
+    showView('home');
+    setTimeout(() => document.getElementById('vacancies-countries').scrollIntoView({behavior:'smooth'}), 50);
+  });
+  document.getElementById('backToList').addEventListener('click', () => {
+    if(currentCountry) openCountry(currentCountry);
+    else showView('home');
+  });
+  document.getElementById('navVacancies').addEventListener('click', (e) => {
+    e.preventDefault();
+    showView('home');
+    dd.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    setTimeout(() => document.getElementById('vacancies-countries').scrollIntoView({behavior:'smooth'}), 50);
+  });
+
+  renderCountries();
+  // Re-render country card labels whenever the language changes.
+  const _applyLangOriginal = applyLang;
+  applyLang = function(lang){
+    _applyLangOriginal(lang);
+    renderCountries();
+    if(currentCountry) openCountry(currentCountry);
+  };
+
 </script>
 
 </body>
