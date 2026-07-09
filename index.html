@@ -1085,7 +1085,7 @@ form.addEventListener("submit", async function(e) {
 
   // ==== Live data source: Google Sheets via Apps Script Web App ====
   // Replace with your own /exec URL from Deploy → New deployment → Web app.
-  const VACANCIES_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzIQ160226EnqZETOc4RfEt4IvIzezfXFHIOTv2_JqAHLC2ZtZS3ZuYuKfromZvBQ49/exec';
+  const VACANCIES_SHEET_URL = 'https://script.google.com/macros/s/PASTE_YOUR_DEPLOYMENT_ID_HERE/exec';
 
   let VACANCIES = FALLBACK_VACANCIES;
 
@@ -1142,7 +1142,7 @@ form.addEventListener("submit", async function(e) {
     const country = COUNTRIES.find(c => c.code === code);
     document.getElementById('vacListEyebrow').textContent = t(country.key);
     document.getElementById('vacListTitle').textContent = t('view_vacancies_btn') + ' — ' + t(country.key);
-    const jobs = VACANCIES.filter(v => v.country === code);
+    const jobs = VACANCIES.filter(v => String(v.country).trim().toLowerCase() === code);
     const grid = document.getElementById('vacancyListGrid');
     if(jobs.length === 0){
       grid.innerHTML = `<p class="no-vacancies">—</p>`;
@@ -1164,7 +1164,11 @@ form.addEventListener("submit", async function(e) {
   }
 
   function openVacancy(id){
-    const v = VACANCIES.find(v => v.id === id);
+    const v = VACANCIES.find(v => String(v.id) === String(id));
+    if(!v){
+      console.warn('Вакансію з id', id, 'не знайдено — можливо, рядок видалили з таблиці.');
+      return;
+    }
     const country = COUNTRIES.find(c => c.code === v.country);
     document.getElementById('vacDetailBody').innerHTML = `
       <h2>${v.title}</h2>
